@@ -31,7 +31,7 @@
             $rootScope.$broadcast('context-menu/close');
         }
 
-        return { cancelAll: cancelAll, eventBound: false };
+        return {cancelAll: cancelAll, eventBound: false};
 
     }]);
 
@@ -41,9 +41,9 @@
      * @author Adam Timberlake
      * @link https://github.com/Wildhoney/ngContextMenu
      */
-    module.directive('contextMenu', ['$timeout', '$interpolate', '$compile', 'contextMenu', '$templateRequest', '$sce',
+    module.directive('contextMenu', ['$timeout', '$interpolate', '$compile', 'contextMenu', '$templateRequest', '$sce', '$parse',
 
-        function contextMenuDirective($timeout, $interpolate, $compile, contextMenu, $templateRequest, $sce) {
+        function contextMenuDirective($timeout, $interpolate, $compile, contextMenu, $templateRequest, $sce, $parse) {
 
             return {
 
@@ -55,12 +55,9 @@
 
                 /**
                  * @property scope
-                 * @type {Object}
+                 * @type {Boolean}
                  */
-                scope: {
-                    contextMenuItem: '=?',
-                    contextMenuItemOnSelect: '&?'
-                },
+                scope: true,
 
                 /**
                  * @property require
@@ -77,6 +74,8 @@
                  * @return {void}
                  */
                 link: function link(scope, element, attributes, model) {
+
+                    var callback = $parse(attributes.contextMenuCallback, null, null);
 
                     if (!contextMenu.eventBound) {
 
@@ -101,8 +100,8 @@
 
                         if (scope.menu) {
                             element[0].classList.remove("ngContextMenuIsOpen");
-                            if (scope.contextMenuItem && scope.contextMenuItemOnSelect) {
-                                scope.contextMenuItemOnSelect(scope.contextMenuItem);
+                            if (callback) {
+                                callback(scope);
                             }
                             scope.menu.remove();
                             scope.menu = null;
@@ -113,7 +112,7 @@
 
                     scope.$on('context-menu/close', closeMenu);
                     scope.$on('$destroy', closeMenu);
-                    
+
                     /**
                      * @method getModel
                      * @return {Object}
@@ -137,7 +136,7 @@
                             contextMenu.cancelAll();
                             event.stopPropagation();
                             event.preventDefault();
-                            scope.position = { x: event.pageX, y: event.pageY };
+                            scope.position = {x: event.pageX, y: event.pageY};
 
                         } else {
 
@@ -149,8 +148,8 @@
 
                         $templateRequest($sce.getTrustedResourceUrl(attributes.contextMenu)).then(function then(template) {
                             element[0].className += " ngContextMenuIsOpen";
-                            if (scope.contextMenuItem && scope.contextMenuItemOnSelect) {
-                                scope.contextMenuItemOnSelect(scope.contextMenuItem);
+                            if (callback) {
+                                callback(scope);
                             }
 
                             var compiled = $compile(template)($angular.extend(getModel())),
