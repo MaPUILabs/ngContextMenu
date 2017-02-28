@@ -99,8 +99,8 @@
                     function closeMenu() {
 
                         if (scope.menu) {
-                            if ($scope.item) {
-                                $scope.item.selected = false;
+                            if (scope.item) {
+                                scope.item.selected = false;
                             }
                             //element[0].classList.remove("ngContextMenuIsOpen");
                             scope.menu.remove();
@@ -147,8 +147,8 @@
                         }
 
                         $templateRequest($sce.getTrustedResourceUrl(attributes.contextMenu)).then(function then(template) {
-                            if ($scope.item) {
-                                $scope.item.selected = true;
+                            if (scope.item) {
+                                scope.item.selected = true;
                             }
                             //element[0].className += " ngContextMenuIsOpen";
 
