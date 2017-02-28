@@ -58,7 +58,7 @@
                  * @type {Boolean}
                  */
                 scope: {
-                    item: '='
+                    contextMenuItem: '='
                 },
 
                 /**
@@ -99,10 +99,10 @@
                     function closeMenu() {
 
                         if (scope.menu) {
-                            if (scope.item) {
-                                scope.item.selected = false;
+                            element[0].classList.remove("ngContextMenuIsOpen");
+                            if (scope.contextMenuItem) {
+                                scope.contextMenuItem.selected = false;
                             }
-                            //element[0].classList.remove("ngContextMenuIsOpen");
                             scope.menu.remove();
                             scope.menu = null;
                             scope.position = null;
@@ -147,10 +147,10 @@
                         }
 
                         $templateRequest($sce.getTrustedResourceUrl(attributes.contextMenu)).then(function then(template) {
-                            if (scope.item) {
-                                scope.item.selected = true;
+                            element[0].className += " ngContextMenuIsOpen";
+                            if (scope.contextMenuItem) {
+                                scope.contextMenuItem.selected = true;
                             }
-                            //element[0].className += " ngContextMenuIsOpen";
 
                             var compiled = $compile(template)($angular.extend(getModel())),
                                 menu = $angular.element(compiled);

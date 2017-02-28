@@ -57,7 +57,9 @@
                  * @property scope
                  * @type {Boolean}
                  */
-                scope: true,
+                scope: {
+                    contextMenuItem: '='
+                },
 
                 /**
                  * @property require
@@ -98,6 +100,9 @@
 
                         if (scope.menu) {
                             element[0].classList.remove("ngContextMenuIsOpen");
+                            if (scope.contextMenuItem) {
+                                scope.contextMenuItem.selected = false;
+                            }
                             scope.menu.remove();
                             scope.menu = null;
                             scope.position = null;
@@ -143,6 +148,9 @@
 
                         $templateRequest($sce.getTrustedResourceUrl(attributes.contextMenu)).then(function then(template) {
                             element[0].className += " ngContextMenuIsOpen";
+                            if (scope.contextMenuItem) {
+                                scope.contextMenuItem.selected = true;
+                            }
 
                             var compiled = $compile(template)($angular.extend(getModel())),
                                 menu = $angular.element(compiled);
