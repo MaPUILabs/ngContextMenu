@@ -76,6 +76,14 @@
                 link: function link(scope, element, attributes, model) {
 
                     var callback = $parse(attributes.contextMenuCallback, null, null);
+                    scope.contextMenuIsOpen = scope.$eval(attributes.contextMenuIsOpen);
+                    if (scope.contextMenuIsOpen) {
+                        scope.$watch('contextMenuIsOpen.status', function(nVal, oVal) {
+                            if (oVal && !nVal && scope.menu) {
+                                closeMenu();
+                            }
+                        });
+                    }
 
                     if (!contextMenu.eventBound) {
 
@@ -102,6 +110,9 @@
                             element[0].classList.remove("ngContextMenuIsOpen");
                             if (callback) {
                                 callback(scope);
+                            }
+                            if (scope.contextMenuIsOpen) {
+                                scope.contextMenuIsOpen.status = false;
                             }
                             scope.menu.remove();
                             scope.menu = null;
@@ -150,6 +161,9 @@
                             element[0].className += " ngContextMenuIsOpen";
                             if (callback) {
                                 callback(scope);
+                            }
+                            if (scope.contextMenuIsOpen) {
+                                scope.contextMenuIsOpen.status = true;
                             }
 
                             var compiled = $compile(template)($angular.extend(getModel())),
