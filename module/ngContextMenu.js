@@ -97,6 +97,7 @@
                     function closeMenu() {
 
                         if (scope.menu) {
+                            element[0].classList.remove("ngContextMenuIsOpen");
                             scope.menu.remove();
                             scope.menu = null;
                             scope.position = null;
@@ -141,6 +142,7 @@
                         }
 
                         $templateRequest($sce.getTrustedResourceUrl(attributes.contextMenu)).then(function then(template) {
+                            element[0].className += " ngContextMenuIsOpen";
 
                             var compiled = $compile(template)($angular.extend(getModel())),
                                 menu = $angular.element(compiled);
