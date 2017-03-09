@@ -157,6 +157,10 @@
 
                         }
 
+                        if (scope.$eval(attributes.contextMenuDisabled)) {
+                            return;
+                        }
+
                         $templateRequest($sce.getTrustedResourceUrl(attributes.contextMenu)).then(function then(template) {
                             element[0].className += " ngContextMenuIsOpen";
                             if (callback) {
